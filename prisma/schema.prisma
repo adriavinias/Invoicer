@@ -10,7 +10,7 @@ generator client {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     email         String?    @unique
     emailVerified DateTime?
     telephone     String?
@@ -28,7 +28,7 @@ model User {
 }
 
 model Customer {
-    id          String    @id @default(cuid())
+    id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     email       String    @unique
     telephone   String    @unique
     name        String?
@@ -44,7 +44,7 @@ model Customer {
 }
 
 model Invoice {
-    id            String    @id @default(cuid())
+    id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     invoiceNumber String
     issueDate     DateTime
     dueDate       DateTime?
@@ -52,9 +52,9 @@ model Invoice {
     status        String?
     //Relation customer
     customer      Customer  @relation(fields: [customerId], references: [id])
-    customerId    String
+    customerId    String    @db.Uuid
     //Relation user (gerard, arnau)
     user          User      @relation(fields: [userId], references: [id])
-    userId        String    @unique
+    userId        String    @unique @db.Uuid
     updatedAt     DateTime  @updatedAt
 }

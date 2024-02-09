@@ -4,10 +4,26 @@ import { cookies } from "next/headers"
 import { createClient } from "../utils/supabase/server"
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
+import { string } from "zod"
 
 export async function login(formData: FormData){
     const email = formData.get('email')
     const password = formData.get('password')
+
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
+    const {error} = await supabase.auth.signInWithPassword({
+        email,
+        password
+    })
+
+    console.log(error)
+
+    if(error){
+        redirect('/error')
+    }
+    revalidatePath('/')
+    redirect('/')
 }
 export async function signup(formData: FormData){
     //zod - TODO
@@ -18,17 +34,12 @@ export async function signup(formData: FormData){
     const email = formData.get('email')
     const password = formData.get('password')
 
-    console.log({email, password})
 
-    const data = {
+    const {error} = await supabase.auth.signUp({
         email,
         password
-    }
-
-    const {error} = await supabase.auth.signUp(data)
-
-    console.log({error})
-
+    })
+    
     if(error){
         redirect('/error')
     }
