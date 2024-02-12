@@ -28,8 +28,7 @@ export async function login(formData: FormData){
 export async function signup(formData: FormData){
     //zod - TODO
     //supabase server client
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
+    const supabase = createClient()
 
     const email = formData.get('email')
     const password = formData.get('password')
@@ -47,3 +46,19 @@ export async function signup(formData: FormData){
     redirect('/')
 }
 
+export async function getUser(){
+    const supabase = createClient()
+    const user = await supabase.auth.getUser()
+    return user
+}
+
+export async function signOut(){
+    try{
+        const supabase = createClient()
+        await supabase.auth.signOut()
+        redirect('/')
+    } catch(error){
+        console.log(error)
+    }
+    
+}

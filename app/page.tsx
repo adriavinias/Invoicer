@@ -1,16 +1,29 @@
+'use server'
 import Link from "next/link";
 import { createClient } from './utils/supabase/server'
-import { cookies } from "next/headers";
-const cookieStore = cookies()
-
+import { getUser, signOut } from "./login/actions";
+import SignOut from "./components/SignOut";
 export default async function Home() {
-  const supabase = createClient(cookieStore)
-  const {data: {user}} = await supabase.auth.getUser()
+  const supabase = createClient()
+  const { data: { user } } = await getUser()
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {!user ? (<Link href="/login">Login</Link>) : (<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"> Sign out</button>)}
-      
+      {!user ? (<Link href="/login">Login</Link>)
+        :
+        (
+          <SignOut onSignOut={signOut}>
+            Sign Out
+          </SignOut>
+        )}
+
       <p>{user ? user?.email : ''}</p>
     </main>
   );
 }
+
+/*
+  server component
+    server action
+    server action ----> (pass as props) ----> client component (handles click, runs server action)
+
+*/
