@@ -13,7 +13,6 @@ import { createInvoice } from '../actions'
 import { FormContextCustomers } from "../context/FormContext";
 export default function AddInvoice({ customers }) {
     const [isOpen, setIsOpen] = useState(false)
-    console.log({ customers })
     return (
         <>
             <Button

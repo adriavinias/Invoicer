@@ -6,8 +6,12 @@ import { FormContextCustomers, FormContextUsers } from "../context/FormContext"
 import { TrashIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { v4 as uuidv4 } from 'uuid';
 import { createInvoice } from "../actions";
+import { useFormState } from "react-dom";
 
 export default function Form() {
+    const [state, createInv] = useFormState(createInvoice, null)
+
+
     //get customers from context
     const customers = useContext(FormContextCustomers)
     const [products, setProducts] = useState([{
@@ -15,8 +19,12 @@ export default function Form() {
         description: '',
         price: '',
         qty: '',
-        total: ''
+        total: 0
     }])
+    
+    const [subTotal, setSubTotal] = useState(0)
+    const [total, setTotal] = useState(0)
+    
     const [productLine, setProductLine] = useState()
 
     const handleProductChange = (event: FormEvent, index: number) => {
@@ -34,11 +42,14 @@ export default function Form() {
                     productLine = {...productLine, qty: target.value}
                 }
 
+                if(productLine.price && productLine.qty){
+                    productLine = {...productLine, total: parseFloat(productLine.price) * parseFloat(productLine.qty)}
+                }
+
                 return productLine
             }
             return product
         })
-
         setProducts(productLines)
     }
     
@@ -53,14 +64,15 @@ export default function Form() {
             description: '',
             price: '',
             qty: '',
-            total: ''
+            total: 0
         }])
+
     }
 
 
 
     return (
-        <form>
+        <form action={createInv}>
             <div className="flex justify-items-end mt-4">
                 <Select
                     items={customers ? customers : []}
@@ -142,7 +154,9 @@ export default function Form() {
                                 <TableCell>
                                     <Input 
                                         isReadOnly
-                                        defaultValue={product.total}
+                                        size="sm"
+                                        defaultValue={`${product.total}`}
+                                        value={`${product.total}`}
                                         name="total"
                                         endContent={
                                             <div className="pointer-events-none flex items-center">
@@ -166,14 +180,14 @@ export default function Form() {
 
                 </TableBody>
             </Table>
-            <Button className="mt-5"
+            <Button className="mt-4"
                 isIconOnly
                 color="success"
                 onClick={handleAdd}
             >
                 <PlusCircleIcon className="h-4 w-4" />
             </Button>
-            <Button formAction={createInvoice} color="default">
+            <Button type="submit" color="default">
                 Create Invoice
             </Button>
         </form>
