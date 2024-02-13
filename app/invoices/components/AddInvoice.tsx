@@ -9,6 +9,7 @@ import {
 } from "@nextui-org/react";
 import { useState, useContext, createContext } from "react";
 import Form from './Form'
+import { createInvoice } from '../actions'
 import { FormContextCustomers } from "../context/FormContext";
 export default function AddInvoice({ customers }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -36,6 +37,9 @@ export default function AddInvoice({ customers }) {
                         </FormContextCustomers.Provider>
                     </ModalBody>
                 </ModalContent>
+                <ModalFooter>
+                    
+                </ModalFooter>
 
             </Modal>
         </>
