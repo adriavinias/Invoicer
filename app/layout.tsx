@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,6 +19,10 @@ export default function RootLayout({
     <html lang="en" className="light">
       <body className={inter.className}>
         <Providers>
+          <div className="grid gap-3 p-3">
+            <Link href="/invoices">Invoices</Link>
+            <Link href="/customers">Customers</Link>
+          </div>
           {children}
         </Providers>
       </body>

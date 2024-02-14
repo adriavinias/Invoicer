@@ -10,7 +10,7 @@ import { useFormState } from "react-dom";
 
 export default function Form() {
     const [state, createInv] = useFormState(createInvoice, null)
-
+    console.log(state)
 
     //get customers from context
     const customers = useContext(FormContextCustomers)
@@ -75,21 +75,25 @@ export default function Form() {
         <form action={createInv}>
             <div className="flex justify-items-end mt-4">
                 <Select
+                    key="customer"
                     items={customers ? customers : []}
                     label="Customers"
                     placeholder="Select a customer"
                     className="max-w-xs w-full w-3/4"
                     size="sm"
+                    name="customer"
                     
                 >
                     {({ id, name, surname }) => <SelectItem key={id}>{`${name} ${surname}`}</SelectItem>}
                 </Select>
 
                 <Input
+                    key="date"
                     type="date"
                     size="sm"
-                    className="w-full px-3 w-1/4" />
-
+                    className="w-full px-3 w-1/4"
+                    name="date" 
+                    data-focus="hola"/>
             </div>
 
             <div>
@@ -124,6 +128,7 @@ export default function Form() {
                             <TableRow key={product.id}>
                                 <TableCell>
                                     <Input
+                                        aria-label="description"
                                         type="text"
                                         size="sm"
                                         name="description"
@@ -132,6 +137,7 @@ export default function Form() {
                                 </TableCell>
                                 <TableCell>
                                     <Input
+                                        aria-label="price"
                                         type="number"
                                         size="sm"
                                         name="price"
@@ -145,6 +151,7 @@ export default function Form() {
                                 </TableCell>
                                 <TableCell>
                                     <Input
+                                        aria-label="qty"
                                         type="number"
                                         size="sm"
                                         name="qty"
@@ -153,6 +160,8 @@ export default function Form() {
                                 </TableCell>
                                 <TableCell>
                                     <Input 
+
+                                        aria-label="total"
                                         isReadOnly
                                         size="sm"
                                         defaultValue={`${product.total}`}
