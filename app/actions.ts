@@ -54,7 +54,7 @@ export async function createCustomer(prevState: { message: String }, formData: F
     //redirect()??
 }
 
-//get customer
+//get customers
 
 export async function getCustomers() {
     const prisma = new PrismaClient()
@@ -62,6 +62,24 @@ export async function getCustomers() {
     try {
         const customers = await prisma.customer.findMany()
         return customers
+    } catch (e) {
+        return {message: 'Database error, unable to get customers'}
+    }
+
+}
+
+//get customer
+
+export async function getCustomerBYId(id: string) {
+    const prisma = new PrismaClient()
+
+    try {
+        const customer = await prisma.customer.findUnique({
+            where: {
+                id
+            }
+        })
+        return customer
     } catch (e) {
         return {message: 'Database error, unable to get customers'}
     }
